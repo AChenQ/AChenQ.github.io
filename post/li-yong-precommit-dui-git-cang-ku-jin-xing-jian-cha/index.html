@@ -1,0 +1,300 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>利用precommit对git仓库进行检查 | AChenQ</title>
+
+<link rel="shortcut icon" href="https://achenq.github.io/favicon.ico?v=1683875623409">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://achenq.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            AChenQ
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tag/-jCVAGQ8C/" class="menu gt-a-link">
+                    命令行相关
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1683875623409"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    利用precommit对git仓库进行检查
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-09-26 ·
+                    </time>
+                    
+                        <a href="https://achenq.github.io/tag/ee4inHMft/" class="post-tags">
+                            # pre-commit
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">基本用法</a></li>
+<li><a href="#yaml%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B">yaml文件示例</a></li>
+<li><a href="#python%E5%B8%B8%E7%94%A8%E6%A3%80%E6%9F%A5%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90">python常用检查工具推荐</a>
+<ul>
+<li><a href="#isort">isort</a></li>
+<li><a href="#black">black</a></li>
+<li><a href="#mypy">mypy</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<p>pre-commit可以很方便的管理git repo中的各种检查工具<br>
+其基本原理是作为git repo里面的钩子，可以对要提交的代码进行语法检查，格式化操作。<br>
+配置好之后，git commit时会自动触发检查<br>
+<img src="https://achenq.github.io/post-images/1662022462405.png" alt="" loading="lazy"></p>
+<h2 id="基本用法">基本用法</h2>
+<ol>
+<li>安装pre-commit <code>pip install pre-commit</code></li>
+<li>进入项目根目录运行<code>pre-commit install</code>, 将pre-commit添加到此repo中的钩子中</li>
+<li>在仓库的根目录下添加<code>.pre-commit-config.yaml</code>文件</li>
+<li>运行<code>pre-commit run --all-files</code>即可开始检查</li>
+</ol>
+<h2 id="yaml文件示例">yaml文件示例</h2>
+<p><code>.pre-commit-config.yaml</code>文件内容</p>
+<pre><code>---
+default_stages: [commit]
+default_language_version:
+  python: python3.8
+repos:
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.29.1
+    hooks:
+      - id: pyupgrade
+        args: [--py36-plus]
+</code></pre>
+<p>字段说明:<br>
+default_stages: 在什么动作的时候触发pre-commit检查<br>
+repos: 使用什么工具进行检查</p>
+<h2 id="python常用检查工具推荐">python常用检查工具推荐</h2>
+<p>pre-commit是通过添加对应的github repo地址添加检查工具的，所以需要对应的repo中有.pre-commit-hooks.yaml配置文件</p>
+<h3 id="isort">isort</h3>
+<p>说明: 对import部分进行排序, 是的包导入更加规范，减少多人协作时由于修改包位置导致的冲突<br>
+主要分为以下四大类, 通类别内部按照字母顺序排序</p>
+<pre><code>from __future__ import absolute_import
+
+import os
+import sys
+
+from third_party import (lib1, lib2, lib3, lib4, lib5, lib6, lib7, lib8,
+                         lib9, lib10, lib11, lib12, lib13, lib14, lib15)
+
+from my_lib import Object, Object2, Object3
+</code></pre>
+<p>官方地址: <a href="https://github.com/pycqa/isort">isort</a></p>
+<h3 id="black">black</h3>
+<p>介绍: 按照 PEP 8 规范自动格式化python代码<br>
+官方地址: <a href="https://github.com/psf/black">black</a></p>
+<p>注意isort和black一起用时会有冲突, 使用<code>--profile=black</code>参数来避免冲突</p>
+<pre><code>  - repo: https://github.com/pycqa/isort
+    rev: 5.5.2
+    hooks:
+      - id: isort
+        types: [python]
+        args: [&quot;--profile=black&quot;]
+</code></pre>
+<h3 id="mypy">mypy</h3>
+<p>介绍: python静态语法检查<br>
+注意mypy没有官方适配pre-commit，所以可以使用pre-commit提供的镜像仓库<br>
+mypy静态仓库: <a href="https://github.com/pre-commit/mirrors-mypy">mirrors-mypy</a><br>
+官方地址: <a href="https://github.com/python/mypy">mypy</a><br>
+配置参考</p>
+<pre><code>  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.910
+    hooks:
+      - id: mypy
+        types: [python]
+        exclude: &quot;(test_\\w*\\.py$)&quot;
+        additional_dependencies: [types-PyYAML, types-mock, types-requests&gt;=2.26.0, click]
+        args:
+          [
+            &quot;--cache-dir=/tmp/mypy_cache/&quot;,
+            &quot;--ignore-missing-imports&quot;,
+            &quot;--warn-unreachable&quot;,
+            &quot;--show-error-code&quot;,
+            &quot;--strict-equality&quot;,
+            &quot;--strict&quot;,
+          ]
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://achenq.github.io/post/ubuntu-zhuan-ji/" class="post-title gt-a-link">
+                    ubuntu 装机
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/li-yong-precommit-dui-git-cang-ku-jin-xing-jian-cha/" class="leancloud_visitors" data-flag-title="利用precommit对git仓库进行检查">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'j5PiwQ9815UAEZc3mTHPfOaC-gzGzoHsz',
+		appKey: 'C9WiKlSXJ7Fo49axIu68BE1q',
+		avatar: 'monsterid',
+		pageSize: 5,
+		recordIp: false,
+		placeholder: 'Just Go Go',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">AChenQ</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/AChenQ" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://achenq.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

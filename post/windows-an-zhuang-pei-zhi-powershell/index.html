@@ -1,0 +1,287 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Windows安装配置PowerShell | AChenQ</title>
+
+<link rel="shortcut icon" href="https://achenq.github.io/favicon.ico?v=1683875623409">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://achenq.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            AChenQ
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tag/-jCVAGQ8C/" class="menu gt-a-link">
+                    命令行相关
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1683875623409"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Windows安装配置PowerShell
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-09-02 ·
+                    </time>
+                    
+                        <a href="https://achenq.github.io/tag/lU8axYaUR/" class="post-tags">
+                            # windows
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85-windows-terminal">安装 windows Terminal</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85-windows-power-shell">安装 windows power shell</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85-oh-my-posh">安装 oh my posh</a></li>
+<li><a href="#%E6%8F%92%E4%BB%B6">插件</a></li>
+<li><a href="#alias">Alias</a></li>
+<li><a href="#%E8%BD%AF%E9%93%BE%E6%8E%A5">软链接</a></li>
+<li><a href="#%E5%8C%85%E7%AE%A1%E7%90%86">包管理</a></li>
+<li><a href="#clashx%E4%BB%A3%E7%90%86">clashx代理</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<p>以下操作均在win11下安装</p>
+<p>#目录</p>
+<h2 id="安装-windows-terminal">安装 windows Terminal</h2>
+<p>直接在下列地址下载最新的exe，点击安装即可<br>
+<a href="https://github.com/microsoft/terminal/releases">microsoft-terminal</a></p>
+<h2 id="安装-windows-power-shell">安装 windows power shell</h2>
+<p>首先查看当前的版本, 通常情况下自带的是5.x版本</p>
+<pre><code>$PSVersionTable
+</code></pre>
+<p>访问官网进行下载: <a href="https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2">powershell</a><br>
+下载最新的<code>msi</code>文件</p>
+<h2 id="安装-oh-my-posh">安装 oh my posh</h2>
+<p>运行下列命令即可安装</p>
+<pre><code>winget install JanDeDobbeleer.OhMyPosh -s winget
+</code></pre>
+<p>在<code>$profile</code>添加下列行用以设置主题<br>
+直接 <code>vim $profile</code>即可打开配置文件</p>
+<pre><code>oh-my-posh init pwsh --config &quot;$env:POSH_THEMES_PATH\amro.omp.json&quot; | Invoke-Expression
+</code></pre>
+<p>访问<a href="https://ohmyposh.dev/docs/installation/windows">oh my posh 文档</a>获取更详细的配置</p>
+<h2 id="插件">插件</h2>
+<p>安装PSReadLine获取命令自动补全功能</p>
+<pre><code>Install-Module PSReadLine
+</code></pre>
+<p>并在<code>$profile</code>文件中添加下列行开启此功能</p>
+<pre><code># auto suggestions
+Import-Module PSReadLine
+Set-PSReadLineOption -PredictionSource History
+</code></pre>
+<p>安装posh-git获取git信息显示功能</p>
+<pre><code>Install-Module posh-git
+</code></pre>
+<h2 id="alias">Alias</h2>
+<p>在<code>$profile</code>中通过下列方式添加alias</p>
+<pre><code>function gitStatus{
+    git status
+}
+Set-Alias gst gitStatus
+</code></pre>
+<p>注意如果配置的快捷命令已存在的话，需要先解除绑定</p>
+<pre><code>Remove-Item alias:\ls
+</code></pre>
+<h2 id="软链接">软链接</h2>
+<p>文件</p>
+<pre><code>New-Item -ItemType SymbolicLink -Path C:\Users\hjjge\AppData\Local\nvim\init.vim -Target init.vim
+</code></pre>
+<p>文件夹软链接</p>
+<p>管理员运行cmd, 注意只有cmd才有mklink这个命令<br>
+在D盘下生成一个指向E盘文件夹example的软连接link文件夹</p>
+<pre><code>mklink /d D:\link E:\example
+</code></pre>
+<h2 id="包管理">包管理</h2>
+<p>可以使用chocolatey进行安装， 先安装<code>ChocolateyGet</code></p>
+<pre><code>Install-PackageProvider ChocolateyGet -Force
+</code></pre>
+<p>如果要安装 <code>nodejs</code> , 直接这样安装即可</p>
+<pre><code>Find-Package nodejs -Verbose -Provider ChocolateyGet | Install-Package
+</code></pre>
+<p>官网: <a href="https://github.com/jianyunt/ChocolateyGet">ChocolateyGet</a></p>
+<h2 id="clashx代理">clashx代理</h2>
+<p><img src="https://achenq.github.io/post-images/1662025904438.png" alt="" loading="lazy"><br>
+<img src="https://achenq.github.io/post-images/1662025909255.png" alt="" loading="lazy"><br>
+获取命令后，粘贴在命令行运行即可，类似</p>
+<pre><code>$Env:http_proxy=&quot;http://127.0.0.1:7890&quot;;$Env:https_proxy=&quot;http://127.0.0.1:7890&quot;
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://achenq.github.io/post/zai-vim-zhong-shi-yong-tabnine/" class="post-title gt-a-link">
+                    在vim中使用TabNine
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/windows-an-zhuang-pei-zhi-powershell/" class="leancloud_visitors" data-flag-title="Windows安装配置PowerShell">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'j5PiwQ9815UAEZc3mTHPfOaC-gzGzoHsz',
+		appKey: 'C9WiKlSXJ7Fo49axIu68BE1q',
+		avatar: 'monsterid',
+		pageSize: 5,
+		recordIp: false,
+		placeholder: 'Just Go Go',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">AChenQ</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/AChenQ" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://achenq.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

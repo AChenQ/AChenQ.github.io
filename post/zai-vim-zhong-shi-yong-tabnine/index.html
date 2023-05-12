@@ -1,0 +1,238 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>在vim中使用TabNine | AChenQ</title>
+
+<link rel="shortcut icon" href="https://achenq.github.io/favicon.ico?v=1683875623409">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://achenq.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            AChenQ
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tag/-jCVAGQ8C/" class="menu gt-a-link">
+                    命令行相关
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1683875623409"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    在vim中使用TabNine
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-09-02 ·
+                    </time>
+                    
+                        <a href="https://achenq.github.io/tag/mpHMyAep6/" class="post-tags">
+                            # vim
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>在vim中使用tabnine, tabnine是一个智能补全的工具<br>
+其原始项目地址: <a href="https://github.com/codota/TabNine">TabNine</a></p>
+<p>下面将介绍两种方式来进行安装，我自己是通过coc来使用tabnine</p>
+<ul>
+<li>使用Plugin管理</li>
+<li>使用coc管理</li>
+</ul>
+<h2 id="使用plugin">使用Plugin</h2>
+<p>原项目地址: <a href="https://github.com/codota/tabnine-vim">tabnine-vim</a></p>
+<p>使用步骤:</p>
+<p>添加 <code>&quot;Plug 'zxqfl/tabnine-vim'</code><br>
+运行<code>:PlugInstall</code>即可<br>
+开启配置方式:</p>
+<p>新建一个空白文件<br>
+输入<code>TabNine::config</code>即可开启配置页面<br>
+输入<code>TabNine::sem</code>即可打开当前语言的自动补全<br>
+但是这样对我来说有一个问题，我安装的其他coc插件会没法正常使用<br>
+比如coc-word将不会自动帮你补全英文单词<br>
+所以我采用的是coc进行管理</p>
+<h2 id="使用coc">使用coc</h2>
+<p>原项目地址: <a href="https://github.com/neoclide/coc-tabnine">coc-tabnine</a></p>
+<p>使用步骤:</p>
+<p>运行<code>:CocInstall coc-tabnine</code>安装tabnine插件<br>
+运行<code>:CocCommand tabnine.updateTabNine</code>进行升级<br>
+开启配置方式:</p>
+<p>开启配置文件: CocCommand tabnine.openConfig<br>
+开启设置网址: CocCommand tabnine.openHub</p>
+<p>备注:<br>
+新建一个txt文件，输入上面的命令，即可开启对应的配置页面<br>
+（因为理论上安装了coc-tabnine 之后，vim输入的所有文字都会被输入到tabnine中进行智能补全，所以新开一个文件，输入上面的命令tabnine就可以检测到了）</p>
+<p>接下来接可以开始流畅的码代码啦，可以看到提示菜单中，后缀标签为[TN]即tabnine提供的提示</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://achenq.github.io/post/pi-liang-jie-ya-shell-jiao-ben/" class="post-title gt-a-link">
+                    批量解压shell脚本
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/zai-vim-zhong-shi-yong-tabnine/" class="leancloud_visitors" data-flag-title="在vim中使用TabNine">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'j5PiwQ9815UAEZc3mTHPfOaC-gzGzoHsz',
+		appKey: 'C9WiKlSXJ7Fo49axIu68BE1q',
+		avatar: 'monsterid',
+		pageSize: 5,
+		recordIp: false,
+		placeholder: 'Just Go Go',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">AChenQ</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/AChenQ" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://achenq.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

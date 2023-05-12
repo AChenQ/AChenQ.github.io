@@ -1,0 +1,310 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>zsh 配置 | AChenQ</title>
+
+<link rel="shortcut icon" href="https://achenq.github.io/favicon.ico?v=1683875623409">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://achenq.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            AChenQ
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tag/-jCVAGQ8C/" class="menu gt-a-link">
+                    命令行相关
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1683875623409"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    zsh 配置
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-09-01 ·
+                    </time>
+                    
+                        <a href="https://achenq.github.io/tag/-jCVAGQ8C/" class="post-tags">
+                            # shell
+                        </a>
+                    
+                        <a href="https://achenq.github.io/tag/4l9le1Fyd/" class="post-tags">
+                            # zsh
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a>
+<ul>
+<li><a href="#oh-my-zsh">oh my zsh</a></li>
+<li><a href="#%E4%B8%BB%E9%A2%98">主题</a>
+<ul>
+<li><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98">自定义主题</a></li>
+<li><a href="#%E8%B0%83%E8%89%B2%E6%9D%BF">调色板</a></li>
+</ul>
+</li>
+<li><a href="#%E6%8F%92%E4%BB%B6">插件</a>
+<ul>
+<li><a href="#autosuggestions">autosuggestions</a></li>
+<li><a href="#autojump">autojump</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<p>整了一下自己zsh的配置，在这里将其记录下来</p>
+<h1 id="目录">目录</h1>
+<h2 id="oh-my-zsh">oh my zsh</h2>
+<p>oh my zsh是一款基于zsh命令行的扩展工具集，我们可以通过它简单，快速的配置出自己喜欢的命令行风格</p>
+<p>mac目前开始默认使用zsh作为shell(ubuntu也可以自行安装zsh) 你可以通过下列命令一键安装oh my zsh</p>
+<pre><code>sh -c &quot;$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&quot;
+</code></pre>
+<p>具体详情参照官网: ohmyzsh</p>
+<p>ps: 安装之后，原来的默<code>认~/.zshrc</code>文件会被重命名<code>为~/.zshrc.pre-oh-my-zsh</code>, 新的<code>.zshrc</code>文件为<code>oh my zsh</code>的配置文件</p>
+<h2 id="主题">主题</h2>
+<p>oh my zsh默认提供了很多不同风格的主题，只需要修改~/.zshrc文件中的<code>ZSH_THEME=&quot;主题&quot;</code>字段即可</p>
+<p>我设置的为<code>ZSH_THEM=cloud</code></p>
+<p>官方提供的主题地址: <a href="https://github.com/ohmyzsh/ohmyzsh/wiki/Themes">themes</a></p>
+<h3 id="自定义主题">自定义主题</h3>
+<p>如果对提供的样例主题不满意，你也可以自定义配置主题</p>
+<p>下图是我配置的终端界面，仅显示我想显示的信息<br>
+<img src="https://achenq.github.io/post-images/1662012542941.png" alt="" loading="lazy"></p>
+<p>在上图界面显示中，前面的云朵图案可以按自己的喜好更改，随后依次显示登陆用户名，路径，git信息</p>
+<p>右侧则显示的为我当前所使用pyenv工具中python环境的名称</p>
+<p>自定义主题具体步骤</p>
+<p>在<code>~/.oh-my-zsh/themes/</code>中新建一个文件，文件名即为主题名，使用上述的ZSH_THEME配置</p>
+<p>ZSH_THEME_CLOUD_PREFIX='☁️' #后面的☁️图案实际上显示是上图中的云朵图案，只不过代码框中不支持</p>
+<pre><code>PROMPT='%{$fg_bold[cyan]%}$ZSH_THEME_CLOUD_PREFIX  %{$fg[white]%}%n%{$fg_bold[green]%}%p %{$fg[green]%}%~ %{$fg_bold[cyan]%}$(git_prompt_info)%{$fg_bold[blue]%} %{$reset_color%}'
+
+RPROMPT='%{$fg[yellow]%}$(pyenv_prompt_info)'
+</code></pre>
+<p>配置方法为<code>%{$fg[color]%}%message </code><br>
+如<code>%{$fg[white]%}%n</code>意思便是显示颜色为白色的用户名</p>
+<p>ps: PROMPT是指命令行从左往右开始依次显示什么信息，RPROMPT则是从右往左</p>
+<p>下表显示一些常用的信息表示符，详细配置请见官网: <a href="http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html">Prompt-Expansion</a></p>
+<table>
+<thead>
+<tr>
+<th>转义变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%*</td>
+<td>系统时间（时：分：秒）</td>
+</tr>
+<tr>
+<td>%D</td>
+<td>系统日期（年-月-日）</td>
+</tr>
+<tr>
+<td>%n</td>
+<td>你的用户名</td>
+</tr>
+<tr>
+<td>%~</td>
+<td>你目前的工作目录相对于～的相对路径（可能在某些zsh版本可能造成乱码）</td>
+</tr>
+<tr>
+<td>%M</td>
+<td>计算机的主机名</td>
+</tr>
+</tbody>
+</table>
+<p>也可以通过编写函数，达到更加复杂的显示逻辑，比如超过多少个字符就将其折叠</p>
+<h3 id="调色板">调色板</h3>
+<p>由于不同终端的调色板不一样，可能显示出的样式会和样例图有出入</p>
+<p>分享一下我使用的调色板, 地址: https://draculatheme.com/iterm/</p>
+<p>各颜色示例<br>
+<img src="https://achenq.github.io/post-images/1662012425264.png" alt="" loading="lazy"></p>
+<h2 id="插件">插件</h2>
+<p>oh my zsh还可以快速便捷安装非常好用的插件，这里推荐两个我最常用的，用过之后再也离不开了的那种</p>
+<h3 id="autosuggestions">autosuggestions</h3>
+<p>这个插件会记录你之前输入过的历史命令，并且自动根据当前输入的前缀在历史命令中进行匹配，如果你想直接输入历史命令，按小键盘的→即可补全，类似这样：<br>
+<img src="https://achenq.github.io/post-images/1662012563595.png" alt="" loading="lazy"></p>
+<p>安装命令:</p>
+<pre><code>git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+</code></pre>
+<p>原地址：<a href="https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md">zsh-autosuggesstions</a></p>
+<h3 id="autojump">autojump</h3>
+<p>与传统的 cd 命令相比，autojump 能够更加快速地导航至目的目录</p>
+<p>你可以直接通过 j + 文件夹名进行目录跳转，前提是历史曾经进入过的目录</p>
+<p>同时auto夹提供很多其他的命令如jo打开文件夹等，详情见官网:https://github.com/wting/autojump</p>
+<p>mac安装</p>
+<pre><code>brew update
+brew install autojump
+</code></pre>
+<p>ubuntu 安装</p>
+<pre><code>apt install autojump
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+
+        
+            <span id="/post/zsh/" class="leancloud_visitors" data-flag-title="zsh 配置">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'j5PiwQ9815UAEZc3mTHPfOaC-gzGzoHsz',
+		appKey: 'C9WiKlSXJ7Fo49axIu68BE1q',
+		avatar: 'monsterid',
+		pageSize: 5,
+		recordIp: false,
+		placeholder: 'Just Go Go',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">AChenQ</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/AChenQ" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://achenq.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

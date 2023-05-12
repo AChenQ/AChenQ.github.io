@@ -1,0 +1,276 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>python selenium 全屏截图 | AChenQ</title>
+
+<link rel="shortcut icon" href="https://achenq.github.io/favicon.ico?v=1683875623409">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://achenq.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            AChenQ
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tag/-jCVAGQ8C/" class="menu gt-a-link">
+                    命令行相关
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1683875623409"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    python selenium 全屏截图
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2023-02-20 ·
+                    </time>
+                    
+                        <a href="https://achenq.github.io/tag/n3FtevNzp/" class="post-tags">
+                            # python
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>主要思路: 滚动条下滑，屏幕截图之后，通过PIL库拼接</p>
+<p>主要问题: selenium获取的页面高度存在误差，会导致拼接出来的图片存在重叠或者覆盖</p>
+<p>实现逻辑:</p>
+<ol>
+<li>获取总页面高度 <code>body_height</code></li>
+<li>将滚动条下滑到最底端,</li>
+<li>获取此时滚动条顶端与页面顶端的距离 <code>scroll_to_top</code></li>
+<li>获取滚动条的长度 <code>scroll_length</code>, 也是下滑截图时间隔</li>
+<li>将滚动条挪到最顶端，开始截图</li>
+<li>移动滚动条，每次下滑<code>scroll_length</code>, 并截图，拼接</li>
+<li>直到当前滚动条顶端与页面顶端的距离, 小于滚动条长度时，代表下一张图到达了网页的底端</li>
+<li>最后一张图片会与上一张图片有重合的内容，覆盖间隔为当前滚动条顶端与<code>scroll_to_top</code>的差额</li>
+</ol>
+<p>代码实现:</p>
+<pre><code class="language-python">from PIL import Image
+from selenium import webdriver
+
+def join_images(self, png1, png2, size=0):
+    &quot;&quot;&quot;
+    图片拼接
+    :param png1: 图片1
+    :param png2: 图片2
+    :param size: 两个图片重叠的距离
+    :return:
+    &quot;&quot;&quot;
+    img1, img2 = Image.open(BytesIO(png1)), Image.open(BytesIO(png2))  # 打开图片对象
+    size1, size2 = img1.size, img2.size  # 获取两张图片的大小
+    joint = Image.new('RGB', (size1[0], size1[1] + size2[1] - size))  # 创建一个空白图片
+    # 设置两张图片要放置的初始位置
+    loc1, loc2 = (0, 0), (0, size1[1] - size)
+    # 分别放置图片
+    joint.paste(img1, loc1)
+    joint.paste(img2, loc2)
+
+    # 图片转bytes返回
+    img_bytes_arr = BytesIO()  # 二进制容器
+    joint.save(img_bytes_arr, format=&quot;PNG&quot;)
+    return img_bytes_arr.getvalue()
+
+driver = webdriver.Chrome(webdriver.ChromeOptions())
+image_bytes = driver.get_screenshot_as_png()
+body_height = driver.execute_script(&quot;return document.documentElement.scrollHeight&quot;)
+driver.execute_script(&quot;window.scroll({top:document.body.clientHeight,left:0,behavior:'auto'});&quot;)
+# 滚动条滚动到最底端时，滚动条顶端距离页面顶端的距离
+bottom_h = driver.execute_script(&quot;return document.documentElement.scrollTop&quot;)
+# 滚动条的changdu
+scroll_length = body_height - bottom_h
+current_h = 0
+driver.execute_script(&quot;window.scroll({top:0,left:0,behavior:'auto'});&quot;)
+while current_h &lt; bottom_h:
+    # 如果剩余的高度大于滚动条的高度，则下滑直接完整拼接
+    if bottom_h - current_h &gt; scroll_length:
+        current_h += scroll_length
+        join_size = 0
+    # 如果剩余的高度小于滚动条的高度，则接下来为最后一张图，需要处理拼接
+    else:
+        join_size = bottom_h - current_h
+        current_h += join_size
+    # 1. 滚动到指定锚点
+    driver.execute_script(&quot;window.scroll({top:%d,left:0,behavior:'auto'});&quot;.format(current_h))
+    # 2. 截图
+    image_bytes_r = driver.get_screenshot_as_png()
+    # 3. 拼接
+    image_bytes = self.join_images(image_bytes, image_bytes_r, join_size)
+
+# 截图保存本地
+with open(f&quot;test.png&quot;, mode=&quot;wb&quot;) as f:
+    f.write(image_bytes)
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://achenq.github.io/post/bi-ji-ben-gai-jia-yong-fu-wu-qi-ji-lu/" class="post-title gt-a-link">
+                    笔记本改家用服务器记录
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/python-selenium-picture/" class="leancloud_visitors" data-flag-title="python selenium 全屏截图">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'j5PiwQ9815UAEZc3mTHPfOaC-gzGzoHsz',
+		appKey: 'C9WiKlSXJ7Fo49axIu68BE1q',
+		avatar: 'monsterid',
+		pageSize: 5,
+		recordIp: false,
+		placeholder: 'Just Go Go',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">AChenQ</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/AChenQ" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://achenq.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

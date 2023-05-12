@@ -1,0 +1,294 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>笔记本改家用服务器记录 | AChenQ</title>
+
+<link rel="shortcut icon" href="https://achenq.github.io/favicon.ico?v=1683875623409">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://achenq.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            AChenQ
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tag/-jCVAGQ8C/" class="menu gt-a-link">
+                    命令行相关
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1683875623409"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    笔记本改家用服务器记录
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2023-02-02 ·
+                    </time>
+                    
+                        <a href="https://achenq.github.io/tag/-jCVAGQ8C/" class="post-tags">
+                            # shell
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>原来笔记本铰链坏了，也不怎么用了，最近有空准备刷成ubuntu放在家里当服务器用</p>
+<p>改造步骤</p>
+<ol>
+<li>刷ubuntu系统</li>
+<li>配置ubuntu系统</li>
+<li>使用cpolar配置内网穿透</li>
+<li>运行服务</li>
+</ol>
+<h3 id="刷ubuntu系统">刷ubuntu系统</h3>
+<h4 id="下载iso镜像">下载iso镜像</h4>
+<p>因为屏幕还能用，所以刷了一个带桌面的ubuntu系统<br>
+国内可以在清华大学开源软件镜像站下载，网址: https://mirrors.tuna.tsinghua.edu.cn/<br>
+点击获取下载连接，我选择的20.04.5 (amd64, Desktop LiveDVD)</p>
+<h3 id="通过rufus制作启动盘">通过rufus制作启动盘</h3>
+<p>rufus下载地址： http://rufus.ie/zh</p>
+<p>下载后选择u盘和iso镜像安装即可，注意制作前会清空u盘原有存储内容</p>
+<h4 id="配置ubuntu系统">配置ubuntu系统</h4>
+<h4 id="配置ubuntu源">配置ubuntu源</h4>
+<p>编辑 /etc/apt/sources.list, 最前列添加以下源</p>
+<pre><code># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+</code></pre>
+<p>运行</p>
+<pre><code>sudo apt-get update
+sudo apt-get upgrade
+</code></pre>
+<h4 id="配置系统不自动休眠">配置系统不自动休眠</h4>
+<p>由于多数时候是远程控制，所以要保证系统不会自动休眠</p>
+<pre><code>sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+</code></pre>
+<pre><code>Created symlink /etc/systemd/system/sleep.target → /dev/null.
+Created symlink /etc/systemd/system/suspend.target → /dev/null.
+Created symlink /etc/systemd/system/hibernate.target → /dev/null.
+Created symlink /etc/systemd/system/hybrid-sleep.target → /dev/null.
+</code></pre>
+<h4 id="配置梯子">配置梯子</h4>
+<p>使用v2ray进行配置</p>
+<ol>
+<li>安装v2ray<br>
+参考<br>
+https://qiyuan-z.github.io/2020/02/23/Ubuntu%E9%85%8D%E7%BD%AEv2ray%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/#post-comment</li>
+</ol>
+<h3 id="配置cpolar内网穿透">配置cpolar内网穿透</h3>
+<p>家用网络通常是不存在公网ip的，所以需要通过工具来配置公网ip以便访问</p>
+<ol>
+<li>
+<p>注册cpolar账号, 获取token<br>
+<a href="https://www.cpolar.com/">cpolar官网</a></p>
+</li>
+<li>
+<p>安装cpolar</p>
+</li>
+</ol>
+<pre><code>curl -L https://www.cpolar.com/static/downloads/install-release-cpolar.sh | sudo bash
+</code></pre>
+<ol start="3">
+<li>配置token</li>
+</ol>
+<pre><code>cpolar authtoken xxxxxxx
+</code></pre>
+<ol start="4">
+<li>添加并启动cpolar</li>
+</ol>
+<pre><code>sudo systemctl enable cpolar
+sudo systemctl start cpolar
+</code></pre>
+<ol start="5">
+<li>代理tcp 22端口(ssh 一般通过此端口)</li>
+</ol>
+<pre><code>cpolar tcp 22
+</code></pre>
+<p>远程通过下列命令登录即可<br>
+注意免费版cpolar长时间不用，此连接会被关闭，重新运行后地址会发生变化</p>
+<pre><code>ssh user@xxx.tcp.cpolar.cn -p 24177
+</code></pre>
+<ol start="6">
+<li>查看公网ip<br>
+打开 https://dashboard.cpolar.com/status<br>
+[注]: 更多cpolar操作请查看 <a href="https://www.cpolar.com/docs">cpolar使用文档</a></li>
+</ol>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://achenq.github.io/post/python-huo-qu-ji-suan-ji-zi-yuan-jin-cheng-xin-xi/" class="post-title gt-a-link">
+                    python 获取计算机资源，进程信息
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/bi-ji-ben-gai-jia-yong-fu-wu-qi-ji-lu/" class="leancloud_visitors" data-flag-title="笔记本改家用服务器记录">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'j5PiwQ9815UAEZc3mTHPfOaC-gzGzoHsz',
+		appKey: 'C9WiKlSXJ7Fo49axIu68BE1q',
+		avatar: 'monsterid',
+		pageSize: 5,
+		recordIp: false,
+		placeholder: 'Just Go Go',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">AChenQ</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/AChenQ" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://achenq.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

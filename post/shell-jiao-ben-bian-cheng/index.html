@@ -1,0 +1,388 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>shell脚本编程 | AChenQ</title>
+
+<link rel="shortcut icon" href="https://achenq.github.io/favicon.ico?v=1683875623409">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://achenq.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            AChenQ
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tag/-jCVAGQ8C/" class="menu gt-a-link">
+                    命令行相关
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1683875623409"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    shell脚本编程
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-09-29 ·
+                    </time>
+                    
+                        <a href="https://achenq.github.io/tag/-jCVAGQ8C/" class="post-tags">
+                            # shell
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <h3 id="脚本解释器">脚本解释器</h3>
+<p>一般第一行指要用什么解释器来运行此脚本， 一般有<code>bash</code>, <code>zsh</code>, <code>sh</code>等</p>
+<pre><code>#!/bin/bash
+</code></pre>
+<p>可以用命令查看本系统现在支持哪些脚本解释器</p>
+<pre><code>cat /etc/shells
+</code></pre>
+<h3 id="变量">变量</h3>
+<p>通过$进行引用</p>
+<pre><code>NAME=&quot;Tom&quot;
+echo &quot;Hello, $NAME&quot;
+</code></pre>
+<p>ps: 也可以把命令的输出结果，赋值给某个变量</p>
+<pre><code>LIST=$(ls)
+</code></pre>
+<h3 id="read-用户输入">read-用户输入</h3>
+<p>通过<code>read</code>读取输入, <code>-p</code>是指显示提示信息<code>PROMPT MESSAGE</code>, 并将用户输入复制给后面的变量<br>
+更多选项可参考: <a href="http://c.biancheng.net/view/2991.html">read 使用</a></p>
+<pre><code>read -p &quot;PROMPT MESSAGE&quot; VARIABLE
+</code></pre>
+<p>示例</p>
+<pre><code>#!/bin/bash
+read -p &quot;Please Enter You Name: &quot; NAME
+echo &quot;Your Name Is: $NAME&quot;
+</code></pre>
+<p>shell 还支持很多内置命令, 列举: <a href="http://c.biancheng.net/view/1136.html">shell 内置命令</a></p>
+<h3 id="if条件判断">if条件判断</h3>
+<p>可以通过<code>if</code>, <code>elif</code>, <code>else</code>关键字进行判断</p>
+<pre><code>
+if [ condition-is-true ]
+then
+  command 1
+elif [ condition-is-true ]
+then
+  command 2
+elif [ condition-is-true ]
+then
+  command 3
+else
+  command 4
+fi
+</code></pre>
+<h3 id="条件是否成立">条件是否成立[[]]</h3>
+<p>由于<code>[[]]</code>完全兼容<code>test</code>和<code>[]</code>，所以推荐使用<code>[[]]</code>即可<br>
+通常与<code>if</code>一起, 可以通过<code>[[ expression ]]</code>使用<br>
+注意后面的<code>[[]]</code>前后一定要有空格, 不能是<code>[[expression]]</code></p>
+<pre><code>#!/bin/bash
+read age
+if [[ $age -le 3 ]]; then
+    echo &quot;婴儿&quot;
+elif [[ $age -ge 3 &amp;&amp; $age -le 8 ]]; then
+    echo &quot;幼儿&quot;
+else
+    echo &quot;成年&quot;
+fi
+
+</code></pre>
+<h4 id="文件选项列表">文件选项列表</h4>
+<table>
+<thead>
+<tr>
+<th>选 项</th>
+<th>作 用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-d   filename</td>
+<td>判断文件是否存在，并且是否为目录文件。</td>
+</tr>
+<tr>
+<td>-e   filename</td>
+<td>判断文件是否存在。</td>
+</tr>
+<tr>
+<td>-f   filename</td>
+<td>判断文件是否存在，井且是否为普通文件。</td>
+</tr>
+<tr>
+<td>-p   filename</td>
+<td>判断文件是否存在，并且是否为管道文件。</td>
+</tr>
+<tr>
+<td>-s   filename</td>
+<td>判断文件是否存在，并且是否为非空。</td>
+</tr>
+<tr>
+<td>-r   filename</td>
+<td>判断文件是否存在，并且是否拥有读权限。</td>
+</tr>
+<tr>
+<td>-w   filename</td>
+<td>判断文件是否存在，并且是否拥有写权限。</td>
+</tr>
+<tr>
+<td>-x   filename</td>
+<td>判断文件是否存在，并且是否拥有执行权限。</td>
+</tr>
+<tr>
+<td>filename1 -nt filename2</td>
+<td>判断 filename1 的修改时间是否比 filename2 的新。</td>
+</tr>
+<tr>
+<td>filename -ot filename2</td>
+<td>判断 filename1 的修改时间是否比 filename2 的旧。</td>
+</tr>
+<tr>
+<td>filename1 -ef filename2</td>
+<td>判断 filename1 是否和 filename2 的 inode 号一致，可以理解为两个文件是否为同一个文件。这个判断用于判断硬链接是很好的方法</td>
+</tr>
+</tbody>
+</table>
+<h4 id="数值比较">数值比较</h4>
+<table>
+<thead>
+<tr>
+<th>选 项</th>
+<th>作 用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>num1 -eq num2</td>
+<td>相等</td>
+</tr>
+<tr>
+<td>num1 -ne num2</td>
+<td>不等</td>
+</tr>
+<tr>
+<td>num1 -lt num2</td>
+<td>&lt;</td>
+</tr>
+<tr>
+<td>num1 -gt num2</td>
+<td>&gt;</td>
+</tr>
+<tr>
+<td>num1 -le num2</td>
+<td>&lt;=</td>
+</tr>
+<tr>
+<td>num1 -ge num2</td>
+<td>&gt;=</td>
+</tr>
+</tbody>
+</table>
+<h4 id="字符串判断">字符串判断</h4>
+<table>
+<thead>
+<tr>
+<th>选 项</th>
+<th>作 用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-z str</td>
+<td>判断str 是否为空。</td>
+</tr>
+<tr>
+<td>-n str</td>
+<td>判断str 是否为非空。</td>
+</tr>
+<tr>
+<td>str1 == str2</td>
+<td>=和==是等价的，判断 str1 是否和 str2 相等。</td>
+</tr>
+<tr>
+<td>str1 != str2</td>
+<td>判断 str1 是否和 str2 不相等。</td>
+</tr>
+</tbody>
+</table>
+<p>注意shell中==、&lt;, &gt; 只能用来比较字符串，不能比较数字...</p>
+<h3 id="整数运算">整数运算(())</h3>
+<p>待补充</p>
+<h3 id="for循环">for循环</h3>
+<p>待补充</p>
+<h3 id="函数">函数</h3>
+<p>待补充</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://achenq.github.io/post/li-yong-precommit-dui-git-cang-ku-jin-xing-jian-cha/" class="post-title gt-a-link">
+                    利用precommit对git仓库进行检查
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/shell-jiao-ben-bian-cheng/" class="leancloud_visitors" data-flag-title="shell脚本编程">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'j5PiwQ9815UAEZc3mTHPfOaC-gzGzoHsz',
+		appKey: 'C9WiKlSXJ7Fo49axIu68BE1q',
+		avatar: 'monsterid',
+		pageSize: 5,
+		recordIp: false,
+		placeholder: 'Just Go Go',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">AChenQ</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/AChenQ" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://achenq.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

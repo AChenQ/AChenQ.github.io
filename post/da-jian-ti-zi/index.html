@@ -1,0 +1,242 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>10min 搭建V2ray梯子 | AChenQ</title>
+
+<link rel="shortcut icon" href="https://achenq.github.io/favicon.ico?v=1683875623409">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://achenq.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            AChenQ
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tag/-jCVAGQ8C/" class="menu gt-a-link">
+                    命令行相关
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1683875623409"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    10min 搭建V2ray梯子
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-09-22 ·
+                    </time>
+                    
+                        <a href="https://achenq.github.io/tag/Y-MwMKjQF/" class="post-tags">
+                            # V2ray
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>主要参考下列教程进行搭建<br>
+<a href="https://github.com/xiaoming2028/FreePAC/wiki/%E7%BE%8E%E5%9B%BDVPS-Hostwinds%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC%E6%90%AD%E5%BB%BAV2Ray%E6%9C%80%E6%96%B0%E4%B8%AD%E6%96%87%E6%95%99%E7%A8%8B">美国VPS Hostwinds一键脚本搭建V2Ray最新中文教程</a></p>
+<p>在搭建过程中对上列教程一些补充的点:</p>
+<ol>
+<li></li>
+</ol>
+<p>按照教程在服务器上安装好V2ray后，没有发现教程有提及如何下载 <code>v2rayN.exe</code>文件<br>
+可以在此链接下载 <a href="https://github.com/AChenQ/config/releases/download/untagged-5a42cf861f6d976bb870/v2rayN-Core.zip">v2rayN-Core</a><br>
+下载后解压打开，继续流程即可</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>windows powershell 终端代理开启</p>
+<pre><code>$Env:http_proxy=&quot;http://127.0.0.1:10809&quot;;$Env:https_proxy=&quot;http://127.0.0.1:10809&quot;
+</code></pre>
+<p>点击设置可以看到V2ray是监听的<code>10808</code>端口, 然后默认情况下代理是<code>socks+1</code>，所以是<code>10809</code></p>
+<ol start="3">
+<li></li>
+</ol>
+<p>生成链接二维码和url</p>
+<ul>
+<li><code>v2ray url</code>  : 生成 vmess URL 链接</li>
+<li><code>v2ray qr</code>   : 生成二维码链接</li>
+<li><code>v2ray ssqr</code> : 生成 Shadowsocks 二维码链接</li>
+</ul>
+<p>4.PAC模式使用<br>
+PAC模式下，需要自定义需要代理网址的名单，不在名单中的则一律不走代理<br>
+按照下列模式添加即可<br>
+<img src="https://achenq.github.io/post-images/1664189761475.png" alt="" loading="lazy"></p>
+<ol start="5">
+<li></li>
+</ol>
+<p>ip被封如何修复</p>
+<p>使用一段时间突然发现不能访问服务器了，和客服交流后，知道可以修改ip地址，按照下列网址解决即可</p>
+<p>参考: https://www.vps234.com/hostwinds-ip-blocked-fix-isp/</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://achenq.github.io/post/ssh-mian-mi-deng-lu/" class="post-title gt-a-link">
+                    ssh 免密登录
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/da-jian-ti-zi/" class="leancloud_visitors" data-flag-title="10min 搭建V2ray梯子">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'j5PiwQ9815UAEZc3mTHPfOaC-gzGzoHsz',
+		appKey: 'C9WiKlSXJ7Fo49axIu68BE1q',
+		avatar: 'monsterid',
+		pageSize: 5,
+		recordIp: false,
+		placeholder: 'Just Go Go',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">AChenQ</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/AChenQ" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://achenq.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>git使用 | AChenQ</title>
+
+<link rel="shortcut icon" href="https://achenq.github.io/favicon.ico?v=1683875623409">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://achenq.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            AChenQ
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tag/-jCVAGQ8C/" class="menu gt-a-link">
+                    命令行相关
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1683875623409"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    git使用
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-09-06 ·
+                    </time>
+                    
+                        <a href="https://achenq.github.io/tag/LAbClBRy2/" class="post-tags">
+                            # git
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#git%E4%BD%BF%E7%94%A8%E9%9B%86%E5%90%88">git使用集合</a>
+<ul>
+<li><a href="#%E5%88%A0%E9%99%A4%E6%9C%AC%E5%9C%B0commit">删除本地commit</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8Bgit%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95">查看git操作记录</a></li>
+<li><a href="#%E9%87%8D%E5%91%BD%E5%90%8D%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF">重命名远程分支</a></li>
+<li><a href="#git-%E5%8F%96%E6%B6%88%E4%B9%8B%E5%89%8D%E7%9A%84commit-amend">git 取消之前的commit --amend</a></li>
+<li><a href="#git%E5%90%88%E5%B9%B6%E5%A4%9A%E4%B8%AA%E5%8E%86%E5%8F%B2commit">git合并多个历史commit</a></li>
+<li><a href="#%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E6%9F%A5%E7%9C%8B">远程分支查看</a></li>
+<li><a href="#warring%E6%8F%90%E7%A4%BA">warring提示</a>
+<ul>
+<li><a href="#warning-lf-will-be-replaced-by-crlf">warning: LF will be replaced by CRLF</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="git使用集合">git使用集合</h1>
+<h2 id="删除本地commit">删除本地commit</h2>
+<pre><code>git reset --soft HEAD~1
+git reset --hard HEAD~1
+</code></pre>
+<p>soft和hard的区别为，soft会将撤销的commit修改放在暂存区中，hard则不会保留</p>
+<h2 id="查看git操作记录">查看git操作记录</h2>
+<pre><code>git reflog
+</code></pre>
+<p>gridea的机制是不保留commit，会强制覆盖整个仓库，<br>
+我之前不了解这个机制，导致本地和云端的笔记都被强制覆盖成初始状态了<br>
+最终靠<code>relog</code>找到了最开始clone下来时的commit，才找回了之前的笔记</p>
+<h2 id="重命名远程分支">重命名远程分支</h2>
+<p>先本地将分支修改为目标名字, 推送目标分支到远端，再删除远端分支</p>
+<p>示例，将dev修改为develop</p>
+<pre><code>git checkout dev
+git pull origin dev
+git checkout master
+git branch -m dev devlope
+git push origin develop
+git push origin --delete develop
+</code></pre>
+<h2 id="git-取消之前的commit-amend">git 取消之前的commit --amend</h2>
+<p>如果只amend了一次，则直接reset即可</p>
+<pre><code>git reset HEAD~1
+</code></pre>
+<p>如果amend了多次，则先使用relog查看需要撤销多少次操作，再使用reset撤销</p>
+<pre><code>git reflog
+git reset HEAD~2
+</code></pre>
+<p>默认是soft模式，即把修改返回到暂存区<br>
+也可以使用hard，直接丢弃修改代码</p>
+<pre><code>git reset --hard HEAD~1
+</code></pre>
+<h2 id="git合并多个历史commit">git合并多个历史commit</h2>
+<pre><code># 合并历史两个提交
+git rebase -i HEAD~2
+</code></pre>
+<p>弹出以下修改界面，按照提示选择前面关键字为<code>s</code>或者<code>d</code>等即可</p>
+<pre><code>pick f0b7d8sdf 历史提交1
+pick f7c223889 历史提交2
+</code></pre>
+<p>修改为, 即表示将历史提交2压缩至历史提交1中</p>
+<pre><code>pick f0b7d8sdf 历史提交1
+s f7c223889 历史提交2
+</code></pre>
+<h2 id="远程分支查看">远程分支查看</h2>
+<p>官方详细文档<a href="https://git-scm.com/book/en/v2/Git-Branching-Remote-Branches">git remote branchs</a><br>
+注意在本地仓库中，远程分支有git进行管理，不能直接修改，仅能查看<br>
+即如果你只想查看远程仓库中的某个分支的代码时，使用下面代码即可切换到对应的远程分支进行查看</p>
+<pre><code>git fetch  # 将远程分支同步为最新
+git checkout origin/branchName
+</code></pre>
+<h2 id="warring提示">warring提示</h2>
+<h3 id="warning-lf-will-be-replaced-by-crlf">warning: LF will be replaced by CRLF</h3>
+<p>问题是由于windows，linux，macos三种系统的文件换行符不一致<br>
+windows多数编辑器会使用lf的换行，所以为了支持跨平台的情况，git在提交的时候会自动将LF换行符替换为CRLF<br>
+配置下列命令来显示支持自动转换</p>
+<pre><code>git config --global core.autocrlf true
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://achenq.github.io/post/windows-an-zhuang-pei-zhi-powershell/" class="post-title gt-a-link">
+                    Windows安装配置PowerShell
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/git-shi-yong/" class="leancloud_visitors" data-flag-title="git使用">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'j5PiwQ9815UAEZc3mTHPfOaC-gzGzoHsz',
+		appKey: 'C9WiKlSXJ7Fo49axIu68BE1q',
+		avatar: 'monsterid',
+		pageSize: 5,
+		recordIp: false,
+		placeholder: 'Just Go Go',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">AChenQ</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/AChenQ" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://achenq.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

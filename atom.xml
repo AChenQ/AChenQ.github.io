@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://achenq.github.io</id>
+    <title>AChenQ</title>
+    <updated>2023-05-12T07:15:10.034Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://achenq.github.io"/>
+    <link rel="self" href="https://achenq.github.io/atom.xml"/>
+    <subtitle>AChenQ</subtitle>
+    <logo>https://achenq.github.io/images/avatar.png</logo>
+    <icon>https://achenq.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2023, AChenQ</rights>
+    <entry>
+        <title type="html"><![CDATA[nodejs和node版本不一致问题]]></title>
+        <id>https://achenq.github.io/post/nodejs-he-node-ban-ben-bu-yi-zhi-wen-ti/</id>
+        <link href="https://achenq.github.io/post/nodejs-he-node-ban-ben-bu-yi-zhi-wen-ti/">
+        </link>
+        <updated>2023-04-19T09:27:20.000Z</updated>
+        <content type="html"><![CDATA[<p>安装包遇见了这样的问题</p>
+<pre><code>ERROR: npm v9.5.1 is known not to run on Node.js v12.22.9.
+</code></pre>
+<p>但是调用版本命令发现node的版本不一致</p>
+<pre><code>$ npm -v
+ 9.5.1
+$ node -v
+ v18.16.0
+$ nodejs --versions
+ v12.22.9
+</code></pre>
+<p>发现机器上有两个nodejs，包读取的node为另一个<br>
+排除发现是node是通过 <code>n</code>工具安装的，需要把另一个系统安装的去除</p>
+<pre><code>sudo apt-get remove nodejs
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[python selenium 全屏截图]]></title>
+        <id>https://achenq.github.io/post/python-selenium-picture/</id>
+        <link href="https://achenq.github.io/post/python-selenium-picture/">
+        </link>
+        <updated>2023-02-20T08:41:13.000Z</updated>
+        <content type="html"><![CDATA[<p>主要思路: 滚动条下滑，屏幕截图之后，通过PIL库拼接</p>
+<p>主要问题: selenium获取的页面高度存在误差，会导致拼接出来的图片存在重叠或者覆盖</p>
+<p>实现逻辑:</p>
+<ol>
+<li>获取总页面高度 <code>body_height</code></li>
+<li>将滚动条下滑到最底端,</li>
+<li>获取此时滚动条顶端与页面顶端的距离 <code>scroll_to_top</code></li>
+<li>获取滚动条的长度 <code>scroll_length</code>, 也是下滑截图时间隔</li>
+<li>将滚动条挪到最顶端，开始截图</li>
+<li>移动滚动条，每次下滑<code>scroll_length</code>, 并截图，拼接</li>
+<li>直到当前滚动条顶端与页面顶端的距离, 小于滚动条长度时，代表下一张图到达了网页的底端</li>
+<li>最后一张图片会与上一张图片有重合的内容，覆盖间隔为当前滚动条顶端与<code>scroll_to_top</code>的差额</li>
+</ol>
+<p>代码实现:</p>
+<pre><code class="language-python">from PIL import Image
+from selenium import webdriver
+
+def join_images(self, png1, png2, size=0):
+    &quot;&quot;&quot;
+    图片拼接
+    :param png1: 图片1
+    :param png2: 图片2
+    :param size: 两个图片重叠的距离
+    :return:
+    &quot;&quot;&quot;
+    img1, img2 = Image.open(BytesIO(png1)), Image.open(BytesIO(png2))  # 打开图片对象
+    size1, size2 = img1.size, img2.size  # 获取两张图片的大小
+    joint = Image.new('RGB', (size1[0], size1[1] + size2[1] - size))  # 创建一个空白图片
+    # 设置两张图片要放置的初始位置
+    loc1, loc2 = (0, 0), (0, size1[1] - size)
+    # 分别放置图片
+    joint.paste(img1, loc1)
+    joint.paste(img2, loc2)
+
+    # 图片转bytes返回
+    img_bytes_arr = BytesIO()  # 二进制容器
+    joint.save(img_bytes_arr, format=&quot;PNG&quot;)
+    return img_bytes_arr.getvalue()
+
+driver = webdriver.Chrome(webdriver.ChromeOptions())
+image_bytes = driver.get_screenshot_as_png()
+body_height = driver.execute_script(&quot;return document.documentElement.scrollHeight&quot;)
+driver.execute_script(&quot;window.scroll({top:document.body.clientHeight,left:0,behavior:'auto'});&quot;)
+# 滚动条滚动到最底端时，滚动条顶端距离页面顶端的距离
+bottom_h = driver.execute_script(&quot;return document.documentElement.scrollTop&quot;)
+# 滚动条的changdu
+scroll_length = body_height - bottom_h
+current_h = 0
+driver.execute_script(&quot;window.scroll({top:0,left:0,behavior:'auto'});&quot;)
+while current_h &lt; bottom_h:
+    # 如果剩余的高度大于滚动条的高度，则下滑直接完整拼接
+    if bottom_h - current_h &gt; scroll_length:
+        current_h += scroll_length
+        join_size = 0
+    # 如果剩余的高度小于滚动条的高度，则接下来为最后一张图，需要处理拼接
+    else:
+        join_size = bottom_h - current_h
+        current_h += join_size
+    # 1. 滚动到指定锚点
+    driver.execute_script(&quot;window.scroll({top:%d,left:0,behavior:'auto'});&quot;.format(current_h))
+    # 2. 截图
+    image_bytes_r = driver.get_screenshot_as_png()
+    # 3. 拼接
+    image_bytes = self.join_images(image_bytes, image_bytes_r, join_size)
+
+# 截图保存本地
+with open(f&quot;test.png&quot;, mode=&quot;wb&quot;) as f:
+    f.write(image_bytes)
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[笔记本改家用服务器记录]]></title>
+        <id>https://achenq.github.io/post/bi-ji-ben-gai-jia-yong-fu-wu-qi-ji-lu/</id>
+        <link href="https://achenq.github.io/post/bi-ji-ben-gai-jia-yong-fu-wu-qi-ji-lu/">
+        </link>
+        <updated>2023-02-02T05:20:50.000Z</updated>
+        <content type="html"><![CDATA[<p>原来笔记本铰链坏了，也不怎么用了，最近有空准备刷成ubuntu放在家里当服务器用</p>
+<p>改造步骤</p>
+<ol>
+<li>刷ubuntu系统</li>
+<li>配置ubuntu系统</li>
+<li>使用cpolar配置内网穿透</li>
+<li>运行服务</li>
+</ol>
+<h3 id="刷ubuntu系统">刷ubuntu系统</h3>
+<h4 id="下载iso镜像">下载iso镜像</h4>
+<p>因为屏幕还能用，所以刷了一个带桌面的ubuntu系统<br>
+国内可以在清华大学开源软件镜像站下载，网址: https://mirrors.tuna.tsinghua.edu.cn/<br>
+点击获取下载连接，我选择的20.04.5 (amd64, Desktop LiveDVD)</p>
+<h3 id="通过rufus制作启动盘">通过rufus制作启动盘</h3>
+<p>rufus下载地址： http://rufus.ie/zh</p>
+<p>下载后选择u盘和iso镜像安装即可，注意制作前会清空u盘原有存储内容</p>
+<h4 id="配置ubuntu系统">配置ubuntu系统</h4>
+<h4 id="配置ubuntu源">配置ubuntu源</h4>
+<p>编辑 /etc/apt/sources.list, 最前列添加以下源</p>
+<pre><code># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+</code></pre>
+<p>运行</p>
+<pre><code>sudo apt-get update
+sudo apt-get upgrade
+</code></pre>
+<h4 id="配置系统不自动休眠">配置系统不自动休眠</h4>
+<p>由于多数时候是远程控制，所以要保证系统不会自动休眠</p>
+<pre><code>sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+</code></pre>
+<pre><code>Created symlink /etc/systemd/system/sleep.target → /dev/null.
+Created symlink /etc/systemd/system/suspend.target → /dev/null.
+Created symlink /etc/systemd/system/hibernate.target → /dev/null.
+Created symlink /etc/systemd/system/hybrid-sleep.target → /dev/null.
+</code></pre>
+<h4 id="配置梯子">配置梯子</h4>
+<p>使用v2ray进行配置</p>
+<ol>
+<li>安装v2ray<br>
+参考<br>
+https://qiyuan-z.github.io/2020/02/23/Ubuntu%E9%85%8D%E7%BD%AEv2ray%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/#post-comment</li>
+</ol>
+<h3 id="配置cpolar内网穿透">配置cpolar内网穿透</h3>
+<p>家用网络通常是不存在公网ip的，所以需要通过工具来配置公网ip以便访问</p>
+<ol>
+<li>
+<p>注册cpolar账号, 获取token<br>
+<a href="https://www.cpolar.com/">cpolar官网</a></p>
+</li>
+<li>
+<p>安装cpolar</p>
+</li>
+</ol>
+<pre><code>curl -L https://www.cpolar.com/static/downloads/install-release-cpolar.sh | sudo bash
+</code></pre>
+<ol start="3">
+<li>配置token</li>
+</ol>
+<pre><code>cpolar authtoken xxxxxxx
+</code></pre>
+<ol start="4">
+<li>添加并启动cpolar</li>
+</ol>
+<pre><code>sudo systemctl enable cpolar
+sudo systemctl start cpolar
+</code></pre>
+<ol start="5">
+<li>代理tcp 22端口(ssh 一般通过此端口)</li>
+</ol>
+<pre><code>cpolar tcp 22
+</code></pre>
+<p>远程通过下列命令登录即可<br>
+注意免费版cpolar长时间不用，此连接会被关闭，重新运行后地址会发生变化</p>
+<pre><code>ssh user@xxx.tcp.cpolar.cn -p 24177
+</code></pre>
+<ol start="6">
+<li>查看公网ip<br>
+打开 https://dashboard.cpolar.com/status<br>
+[注]: 更多cpolar操作请查看 <a href="https://www.cpolar.com/docs">cpolar使用文档</a></li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[python 获取计算机资源，进程信息]]></title>
+        <id>https://achenq.github.io/post/python-huo-qu-ji-suan-ji-zi-yuan-jin-cheng-xin-xi/</id>
+        <link href="https://achenq.github.io/post/python-huo-qu-ji-suan-ji-zi-yuan-jin-cheng-xin-xi/">
+        </link>
+        <updated>2022-11-30T06:15:49.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86">进程管理</a></li>
+<li><a href="#cpu%E7%AE%A1%E7%90%86">CPU管理</a></li>
+<li><a href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86">内存管理</a></li>
+<li><a href="#%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86">磁盘管理</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<p>主要通过psutil进行操作<br>
+官网地址: https://psutil.readthedocs.io/en/latest/</p>
+<h3 id="进程管理">进程管理</h3>
+<pre><code>for proc in psutil.process_iter([&quot;cmdline&quot;]):
+    if process_name in &quot;&quot;.join(proc.cmdline()):
+        Message.info(f&quot;检测{process_name}正在运行中&quot;)
+</code></pre>
+<p>获取平均使用率</p>
+<h3 id="cpu管理">CPU管理</h3>
+<pre><code>cpu_usage = psutil.cpu_percent()
+</code></pre>
+<h3 id="内存管理">内存管理</h3>
+<pre><code>memory_usage = psutil.virtual_memory().percent
+</code></pre>
+<h3 id="磁盘管理">磁盘管理</h3>
+<pre><code>disk_usage = psutil.disk_usage(&quot;/&quot;).percent
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[shell常用命令]]></title>
+        <id>https://achenq.github.io/post/shell-chang-yong-ming-ling/</id>
+        <link href="https://achenq.github.io/post/shell-chang-yong-ming-ling/">
+        </link>
+        <updated>2022-10-08T01:25:08.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="通过进程名查找pid-通过pid查找进程名">通过进程名查找PID &amp;&amp; 通过PID查找进程名</h3>
+<pre><code>ps -ef | grep 'name'
+</code></pre>
+<p>name为模糊匹配，所有包括此name的都会打印出来</p>
+<h3 id="通过端口查看占用进程">通过端口查看占用进程</h3>
+<p>通过<code>netstat</code>查看所有TCP端口占用情况</p>
+<pre><code>netstat -ntlp | grep 'port'
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[shell脚本编程]]></title>
+        <id>https://achenq.github.io/post/shell-jiao-ben-bian-cheng/</id>
+        <link href="https://achenq.github.io/post/shell-jiao-ben-bian-cheng/">
+        </link>
+        <updated>2022-09-29T01:40:23.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="脚本解释器">脚本解释器</h3>
+<p>一般第一行指要用什么解释器来运行此脚本， 一般有<code>bash</code>, <code>zsh</code>, <code>sh</code>等</p>
+<pre><code>#!/bin/bash
+</code></pre>
+<p>可以用命令查看本系统现在支持哪些脚本解释器</p>
+<pre><code>cat /etc/shells
+</code></pre>
+<h3 id="变量">变量</h3>
+<p>通过$进行引用</p>
+<pre><code>NAME=&quot;Tom&quot;
+echo &quot;Hello, $NAME&quot;
+</code></pre>
+<p>ps: 也可以把命令的输出结果，赋值给某个变量</p>
+<pre><code>LIST=$(ls)
+</code></pre>
+<h3 id="read-用户输入">read-用户输入</h3>
+<p>通过<code>read</code>读取输入, <code>-p</code>是指显示提示信息<code>PROMPT MESSAGE</code>, 并将用户输入复制给后面的变量<br>
+更多选项可参考: <a href="http://c.biancheng.net/view/2991.html">read 使用</a></p>
+<pre><code>read -p &quot;PROMPT MESSAGE&quot; VARIABLE
+</code></pre>
+<p>示例</p>
+<pre><code>#!/bin/bash
+read -p &quot;Please Enter You Name: &quot; NAME
+echo &quot;Your Name Is: $NAME&quot;
+</code></pre>
+<p>shell 还支持很多内置命令, 列举: <a href="http://c.biancheng.net/view/1136.html">shell 内置命令</a></p>
+<h3 id="if条件判断">if条件判断</h3>
+<p>可以通过<code>if</code>, <code>elif</code>, <code>else</code>关键字进行判断</p>
+<pre><code>
+if [ condition-is-true ]
+then
+  command 1
+elif [ condition-is-true ]
+then
+  command 2
+elif [ condition-is-true ]
+then
+  command 3
+else
+  command 4
+fi
+</code></pre>
+<h3 id="条件是否成立">条件是否成立[[]]</h3>
+<p>由于<code>[[]]</code>完全兼容<code>test</code>和<code>[]</code>，所以推荐使用<code>[[]]</code>即可<br>
+通常与<code>if</code>一起, 可以通过<code>[[ expression ]]</code>使用<br>
+注意后面的<code>[[]]</code>前后一定要有空格, 不能是<code>[[expression]]</code></p>
+<pre><code>#!/bin/bash
+read age
+if [[ $age -le 3 ]]; then
+    echo &quot;婴儿&quot;
+elif [[ $age -ge 3 &amp;&amp; $age -le 8 ]]; then
+    echo &quot;幼儿&quot;
+else
+    echo &quot;成年&quot;
+fi
+
+</code></pre>
+<h4 id="文件选项列表">文件选项列表</h4>
+<table>
+<thead>
+<tr>
+<th>选 项</th>
+<th>作 用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-d   filename</td>
+<td>判断文件是否存在，并且是否为目录文件。</td>
+</tr>
+<tr>
+<td>-e   filename</td>
+<td>判断文件是否存在。</td>
+</tr>
+<tr>
+<td>-f   filename</td>
+<td>判断文件是否存在，井且是否为普通文件。</td>
+</tr>
+<tr>
+<td>-p   filename</td>
+<td>判断文件是否存在，并且是否为管道文件。</td>
+</tr>
+<tr>
+<td>-s   filename</td>
+<td>判断文件是否存在，并且是否为非空。</td>
+</tr>
+<tr>
+<td>-r   filename</td>
+<td>判断文件是否存在，并且是否拥有读权限。</td>
+</tr>
+<tr>
+<td>-w   filename</td>
+<td>判断文件是否存在，并且是否拥有写权限。</td>
+</tr>
+<tr>
+<td>-x   filename</td>
+<td>判断文件是否存在，并且是否拥有执行权限。</td>
+</tr>
+<tr>
+<td>filename1 -nt filename2</td>
+<td>判断 filename1 的修改时间是否比 filename2 的新。</td>
+</tr>
+<tr>
+<td>filename -ot filename2</td>
+<td>判断 filename1 的修改时间是否比 filename2 的旧。</td>
+</tr>
+<tr>
+<td>filename1 -ef filename2</td>
+<td>判断 filename1 是否和 filename2 的 inode 号一致，可以理解为两个文件是否为同一个文件。这个判断用于判断硬链接是很好的方法</td>
+</tr>
+</tbody>
+</table>
+<h4 id="数值比较">数值比较</h4>
+<table>
+<thead>
+<tr>
+<th>选 项</th>
+<th>作 用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>num1 -eq num2</td>
+<td>相等</td>
+</tr>
+<tr>
+<td>num1 -ne num2</td>
+<td>不等</td>
+</tr>
+<tr>
+<td>num1 -lt num2</td>
+<td>&lt;</td>
+</tr>
+<tr>
+<td>num1 -gt num2</td>
+<td>&gt;</td>
+</tr>
+<tr>
+<td>num1 -le num2</td>
+<td>&lt;=</td>
+</tr>
+<tr>
+<td>num1 -ge num2</td>
+<td>&gt;=</td>
+</tr>
+</tbody>
+</table>
+<h4 id="字符串判断">字符串判断</h4>
+<table>
+<thead>
+<tr>
+<th>选 项</th>
+<th>作 用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-z str</td>
+<td>判断str 是否为空。</td>
+</tr>
+<tr>
+<td>-n str</td>
+<td>判断str 是否为非空。</td>
+</tr>
+<tr>
+<td>str1 == str2</td>
+<td>=和==是等价的，判断 str1 是否和 str2 相等。</td>
+</tr>
+<tr>
+<td>str1 != str2</td>
+<td>判断 str1 是否和 str2 不相等。</td>
+</tr>
+</tbody>
+</table>
+<p>注意shell中==、&lt;, &gt; 只能用来比较字符串，不能比较数字...</p>
+<h3 id="整数运算">整数运算(())</h3>
+<p>待补充</p>
+<h3 id="for循环">for循环</h3>
+<p>待补充</p>
+<h3 id="函数">函数</h3>
+<p>待补充</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[利用precommit对git仓库进行检查]]></title>
+        <id>https://achenq.github.io/post/li-yong-precommit-dui-git-cang-ku-jin-xing-jian-cha/</id>
+        <link href="https://achenq.github.io/post/li-yong-precommit-dui-git-cang-ku-jin-xing-jian-cha/">
+        </link>
+        <updated>2022-09-26T08:01:17.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">基本用法</a></li>
+<li><a href="#yaml%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B">yaml文件示例</a></li>
+<li><a href="#python%E5%B8%B8%E7%94%A8%E6%A3%80%E6%9F%A5%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90">python常用检查工具推荐</a>
+<ul>
+<li><a href="#isort">isort</a></li>
+<li><a href="#black">black</a></li>
+<li><a href="#mypy">mypy</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<p>pre-commit可以很方便的管理git repo中的各种检查工具<br>
+其基本原理是作为git repo里面的钩子，可以对要提交的代码进行语法检查，格式化操作。<br>
+配置好之后，git commit时会自动触发检查<br>
+<img src="https://achenq.github.io/post-images/1662022462405.png" alt="" loading="lazy"></p>
+<h2 id="基本用法">基本用法</h2>
+<ol>
+<li>安装pre-commit <code>pip install pre-commit</code></li>
+<li>进入项目根目录运行<code>pre-commit install</code>, 将pre-commit添加到此repo中的钩子中</li>
+<li>在仓库的根目录下添加<code>.pre-commit-config.yaml</code>文件</li>
+<li>运行<code>pre-commit run --all-files</code>即可开始检查</li>
+</ol>
+<h2 id="yaml文件示例">yaml文件示例</h2>
+<p><code>.pre-commit-config.yaml</code>文件内容</p>
+<pre><code>---
+default_stages: [commit]
+default_language_version:
+  python: python3.8
+repos:
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.29.1
+    hooks:
+      - id: pyupgrade
+        args: [--py36-plus]
+</code></pre>
+<p>字段说明:<br>
+default_stages: 在什么动作的时候触发pre-commit检查<br>
+repos: 使用什么工具进行检查</p>
+<h2 id="python常用检查工具推荐">python常用检查工具推荐</h2>
+<p>pre-commit是通过添加对应的github repo地址添加检查工具的，所以需要对应的repo中有.pre-commit-hooks.yaml配置文件</p>
+<h3 id="isort">isort</h3>
+<p>说明: 对import部分进行排序, 是的包导入更加规范，减少多人协作时由于修改包位置导致的冲突<br>
+主要分为以下四大类, 通类别内部按照字母顺序排序</p>
+<pre><code>from __future__ import absolute_import
+
+import os
+import sys
+
+from third_party import (lib1, lib2, lib3, lib4, lib5, lib6, lib7, lib8,
+                         lib9, lib10, lib11, lib12, lib13, lib14, lib15)
+
+from my_lib import Object, Object2, Object3
+</code></pre>
+<p>官方地址: <a href="https://github.com/pycqa/isort">isort</a></p>
+<h3 id="black">black</h3>
+<p>介绍: 按照 PEP 8 规范自动格式化python代码<br>
+官方地址: <a href="https://github.com/psf/black">black</a></p>
+<p>注意isort和black一起用时会有冲突, 使用<code>--profile=black</code>参数来避免冲突</p>
+<pre><code>  - repo: https://github.com/pycqa/isort
+    rev: 5.5.2
+    hooks:
+      - id: isort
+        types: [python]
+        args: [&quot;--profile=black&quot;]
+</code></pre>
+<h3 id="mypy">mypy</h3>
+<p>介绍: python静态语法检查<br>
+注意mypy没有官方适配pre-commit，所以可以使用pre-commit提供的镜像仓库<br>
+mypy静态仓库: <a href="https://github.com/pre-commit/mirrors-mypy">mirrors-mypy</a><br>
+官方地址: <a href="https://github.com/python/mypy">mypy</a><br>
+配置参考</p>
+<pre><code>  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.910
+    hooks:
+      - id: mypy
+        types: [python]
+        exclude: &quot;(test_\\w*\\.py$)&quot;
+        additional_dependencies: [types-PyYAML, types-mock, types-requests&gt;=2.26.0, click]
+        args:
+          [
+            &quot;--cache-dir=/tmp/mypy_cache/&quot;,
+            &quot;--ignore-missing-imports&quot;,
+            &quot;--warn-unreachable&quot;,
+            &quot;--show-error-code&quot;,
+            &quot;--strict-equality&quot;,
+            &quot;--strict&quot;,
+          ]
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ubuntu 装机]]></title>
+        <id>https://achenq.github.io/post/ubuntu-zhuan-ji/</id>
+        <link href="https://achenq.github.io/post/ubuntu-zhuan-ji/">
+        </link>
+        <updated>2022-09-23T01:14:45.000Z</updated>
+        <content type="html"><![CDATA[<p>今天整了一下Ubuntu，中间所有命令整理在下面以便下次使用</p>
+<ol>
+<li>安装zsh &amp; ohmyzsh &amp; 导入配置 &amp; 安装ohmyzsh插件</li>
+</ol>
+<pre><code>apt update
+apt install zsh
+chsh -s /bin/zsh  # 默认zsh
+sh -c &quot;$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&quot;
+mkdir ~/zhen_code
+git clone https://github.com/AChenQ/config.git ~/zhen_code/config
+ln -s ~/zhen_code/config/shell/zhen-cloud.zsh-theme ~/.oh-my-zsh/custom/themes/zhen-cloud.zsh-theme
+ln -s ~/zhen_code/config/shell/.zshrc ~/.zshrc
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+apt install autojump
+</code></pre>
+<ol start="2">
+<li>安装neovim &amp; 导入配置</li>
+</ol>
+<pre><code>add-apt-repository ppa:jonathonf/vim
+add-apt-repository ppa:neovim-ppa/unstable
+apt install vim
+apt install neovim
+apt install npm
+n stable
+npm install -g n
+npm install -g neovim
+
+mkdir ~/.config
+ln -s ~/zhen_code/config/nvim ~/.config/nvim
+sh -c 'curl -fLo &quot;${XDG_DATA_HOME:-$HOME/.local/share}&quot;/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+</code></pre>
+<ol start="3">
+<li>安装pyenv(python环境管理), tmux(linux Session窗口管理)</li>
+</ol>
+<pre><code>curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | zsh
+apt install build-essential zlib1g-dev patch ruby gem ruby-dev libffi-dev tmux
+gem install neovim
+pyenv install 3.9.5
+pyenv global 3.9.5
+pip install neovim
+</code></pre>
+<ol start="4">
+<li>git全局配置</li>
+</ol>
+<pre><code>git config --global user.name &quot;zhenchen&quot;
+git config --global user.email &quot;cz2350276852@163.com&quot;
+git config --global core.editor &quot;nvim&quot;
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[10min 搭建V2ray梯子]]></title>
+        <id>https://achenq.github.io/post/da-jian-ti-zi/</id>
+        <link href="https://achenq.github.io/post/da-jian-ti-zi/">
+        </link>
+        <updated>2022-09-22T09:14:45.000Z</updated>
+        <content type="html"><![CDATA[<p>主要参考下列教程进行搭建<br>
+<a href="https://github.com/xiaoming2028/FreePAC/wiki/%E7%BE%8E%E5%9B%BDVPS-Hostwinds%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC%E6%90%AD%E5%BB%BAV2Ray%E6%9C%80%E6%96%B0%E4%B8%AD%E6%96%87%E6%95%99%E7%A8%8B">美国VPS Hostwinds一键脚本搭建V2Ray最新中文教程</a></p>
+<p>在搭建过程中对上列教程一些补充的点:</p>
+<ol>
+<li></li>
+</ol>
+<p>按照教程在服务器上安装好V2ray后，没有发现教程有提及如何下载 <code>v2rayN.exe</code>文件<br>
+可以在此链接下载 <a href="https://github.com/AChenQ/config/releases/download/untagged-5a42cf861f6d976bb870/v2rayN-Core.zip">v2rayN-Core</a><br>
+下载后解压打开，继续流程即可</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>windows powershell 终端代理开启</p>
+<pre><code>$Env:http_proxy=&quot;http://127.0.0.1:10809&quot;;$Env:https_proxy=&quot;http://127.0.0.1:10809&quot;
+</code></pre>
+<p>点击设置可以看到V2ray是监听的<code>10808</code>端口, 然后默认情况下代理是<code>socks+1</code>，所以是<code>10809</code></p>
+<ol start="3">
+<li></li>
+</ol>
+<p>生成链接二维码和url</p>
+<ul>
+<li><code>v2ray url</code>  : 生成 vmess URL 链接</li>
+<li><code>v2ray qr</code>   : 生成二维码链接</li>
+<li><code>v2ray ssqr</code> : 生成 Shadowsocks 二维码链接</li>
+</ul>
+<p>4.PAC模式使用<br>
+PAC模式下，需要自定义需要代理网址的名单，不在名单中的则一律不走代理<br>
+按照下列模式添加即可<br>
+<img src="https://achenq.github.io/post-images/1664189761475.png" alt="" loading="lazy"></p>
+<ol start="5">
+<li></li>
+</ol>
+<p>ip被封如何修复</p>
+<p>使用一段时间突然发现不能访问服务器了，和客服交流后，知道可以修改ip地址，按照下列网址解决即可</p>
+<p>参考: https://www.vps234.com/hostwinds-ip-blocked-fix-isp/</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ssh 免密登录]]></title>
+        <id>https://achenq.github.io/post/ssh-mian-mi-deng-lu/</id>
+        <link href="https://achenq.github.io/post/ssh-mian-mi-deng-lu/">
+        </link>
+        <updated>2022-09-22T09:07:55.000Z</updated>
+        <content type="html"><![CDATA[<p>本机登录服务器免密登录步骤</p>
+<h3 id="1在本机上生成公钥">1.在本机上生成公钥</h3>
+<pre><code>ssh-keygen -t rsa
+</code></pre>
+<h3 id="2将生成的公钥上传至服务器上">2.将生成的公钥上传至服务器上</h3>
+<pre><code>scp -p ~/.ssh/id_rsa.pub user@&lt;ip&gt;:~/.ssh/authorized_keys
+</code></pre>
+<h3 id="3登录服务器设置权限">3.登录服务器设置权限</h3>
+<pre><code>chmod 600 .ssh/authorized_keys
+chmod 700 .ssh
+</code></pre>
+<h3 id="4修改ssh配置文件linux">4.修改ssh配置文件(linux)</h3>
+<p>为保护文件，需要root权限</p>
+<pre><code>vi /etc/ssh/sshd_config
+</code></pre>
+<p>保证下面三个配置均为<code>yes</code></p>
+<pre><code>RSAAuthentication yes 
+PubkeyAuthentication yes 
+AuthorizedKeysFile .ssh/authorized_keys
+</code></pre>
+<h3 id="5重启ssh服务">5.重启ssh服务</h3>
+<pre><code>sudo service sshd restart
+</code></pre>
+<p>现在就可以免密登陆了</p>
+]]></content>
+    </entry>
+</feed>
